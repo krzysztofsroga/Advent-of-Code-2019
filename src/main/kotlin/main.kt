@@ -19,12 +19,13 @@ fun main() {
     val iSet = mutableSetOf<Int>()
     val cSet = mutableSetOf<Char>()
     val sSet = mutableSetOf<String>()
-    val posSet = mutableSetOf<Vector>()
+    val posSet = mutableMapOf<Vector, Int>()
     var minDistance: Int = 10000000
+
     aocSolution(3) {
 
         first().let {
-
+            var steps = 0
             val s = it.split(",")
             var currentPos = Vector(0, 0)
             s.forEach {
@@ -38,9 +39,12 @@ fun main() {
                     }
                     val iterations = it.drop(1).toInt()
                     for(x in 0 until iterations) {
+                        steps += 1
                         currentPos += direction
+                        if(!posSet.containsKey(currentPos)) {
+                            posSet[currentPos] = steps
+                        }
 
-                        posSet+=currentPos
                     }
 
                 } catch (e: Exception) {}
@@ -50,6 +54,7 @@ fun main() {
         this[1].let {
 
             val s = it.split(",")
+            var steps = 0
             var currentPos = Vector(0, 0)
             s.forEach {
                 try {
@@ -63,8 +68,10 @@ fun main() {
                     val iterations = it.drop(1).toInt()
                     for(x in 0 until iterations) {
                         currentPos += direction
-                        if(posSet.contains(currentPos)) {
-                            val dist = abs(currentPos.x) + abs(currentPos.y)
+                        steps += 1
+                        if(posSet.containsKey(currentPos)) {
+
+                            val dist = posSet[currentPos]!! + steps
                             if(dist < minDistance) {
                                 minDistance = dist
                             }
@@ -83,6 +90,7 @@ fun main() {
 300 is wrong
 373 is wrong
 
+93654 is right (part 2)
 joinToString(",").let
  */
 }
@@ -173,6 +181,8 @@ aocSolution(2) {
     0
 }.postLevel(2)
  */
+
+
 fun cmp(s1: String, s2: String) {
     s1.zip(s2).count { it.first == it.second }
 }
