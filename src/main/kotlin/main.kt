@@ -22,10 +22,11 @@ fun main() {
     val posSet = mutableSetOf<Vector>()
     var minDistance: Int = 10000000
     aocSolution(3) {
-        var currentPos = Vector(0, 0)
 
-        joinToString(",").let {
-                val s = it.split(",")
+        map {
+            var currentPos = Vector(0, 0)
+
+            val s = it.split(",")
                 s.forEach {
                     try {
                         val direction = when(it.first()) {
@@ -36,7 +37,7 @@ fun main() {
                             else -> throw Exception()
                         }
                         val iterations = it.drop(1).toInt()
-                        for(x in 0..iterations) {
+                        for(x in 0 until iterations) {
                             currentPos += direction
                             if(posSet.contains(currentPos)) {
                                 val dist = abs(currentPos.x) + abs(currentPos.y)
@@ -54,7 +55,13 @@ fun main() {
 
         minDistance
     }
+/*
+237 is wrong
+300 is wrong
+373 is wrong
 
+joinToString(",").let
+ */
 }
 
 class Vector(val x: Int, val y: Int) {
