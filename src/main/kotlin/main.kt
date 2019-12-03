@@ -23,35 +23,58 @@ fun main() {
     var minDistance: Int = 10000000
     aocSolution(3) {
 
-        map {
-            var currentPos = Vector(0, 0)
+        first().let {
 
             val s = it.split(",")
-                s.forEach {
-                    try {
-                        val direction = when(it.first()) {
-                            'R' -> Vector(1, 0)
-                            'L' -> Vector(-1, 0)
-                            'U' -> Vector(0, 1)
-                            'D' -> Vector(0, -1)
-                            else -> throw Exception()
-                        }
-                        val iterations = it.drop(1).toInt()
-                        for(x in 0 until iterations) {
-                            currentPos += direction
-                            if(posSet.contains(currentPos)) {
-                                val dist = abs(currentPos.x) + abs(currentPos.y)
-                                if(dist < minDistance) {
-                                    minDistance = dist
-                                }
+            var currentPos = Vector(0, 0)
+            s.forEach {
+                try {
+                    val direction = when(it.first()) {
+                        'R' -> Vector(1, 0)
+                        'L' -> Vector(-1, 0)
+                        'U' -> Vector(0, 1)
+                        'D' -> Vector(0, -1)
+                        else -> throw Exception()
+                    }
+                    val iterations = it.drop(1).toInt()
+                    for(x in 0 until iterations) {
+                        currentPos += direction
 
-                            }
-                            posSet+=currentPos
-                        }
+                        posSet+=currentPos
+                    }
 
-                    } catch (e: Exception) {}
-                }
+                } catch (e: Exception) {}
             }
+        }
+
+        this[1].let {
+
+            val s = it.split(",")
+            var currentPos = Vector(0, 0)
+            s.forEach {
+                try {
+                    val direction = when(it.first()) {
+                        'R' -> Vector(1, 0)
+                        'L' -> Vector(-1, 0)
+                        'U' -> Vector(0, 1)
+                        'D' -> Vector(0, -1)
+                        else -> throw Exception()
+                    }
+                    val iterations = it.drop(1).toInt()
+                    for(x in 0 until iterations) {
+                        currentPos += direction
+                        if(posSet.contains(currentPos)) {
+                            val dist = abs(currentPos.x) + abs(currentPos.y)
+                            if(dist < minDistance) {
+                                minDistance = dist
+                            }
+
+                        }
+                    }
+
+                } catch (e: Exception) {}
+            }
+        }
 
         minDistance
     }
