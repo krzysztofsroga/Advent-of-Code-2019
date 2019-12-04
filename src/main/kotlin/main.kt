@@ -1,15 +1,50 @@
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.result.Result
-
-import kotlinx.coroutines.*
-import java.io.File
-import kotlin.math.abs
-
 //import kotlin.math.pow
 //import kotlin.system.measureTimeMillis
 
 fun main() {
+
+}
+
+fun day4_2019() {
+    aocSolution(4) {
+        (240920..789857).asSequence().filter { it in 100_000..999_999 }.count { number ->
+            var currentMax = 0
+            var foundTwoConsecutive = false
+            number.splitIntoDigits().forEach { digit ->
+                when {
+                    digit < currentMax -> return@count false
+                    digit == currentMax -> foundTwoConsecutive = true
+                }
+                currentMax = digit
+            }
+            foundTwoConsecutive
+        }
+
+    }.postLevel(1)
+    aocSolution(4) {
+        (240920..789857).asSequence().filter { it in 100_000..999_999 }.count { number ->
+            var currentMax = 0
+            val consecutive = mutableMapOf<Int, Int>()
+            number.splitIntoDigits().forEach { digit ->
+                when {
+                    digit < currentMax -> return@count false
+                }
+                consecutive[digit] = consecutive.getOrDefault(digit, 0) + 1
+                currentMax = digit
+            }
+            consecutive.containsValue(2)
+        }
+
+    }.postLevel(2)
+}
+
+fun Int.splitIntoDigits(): List<Int> {
+    if (this < 10) return listOf(this)
+    return (this / 10).splitIntoDigits() + this % 10
+}
+
+
+fun day3_2019() {
 
     var a = 0
     var b = 0
@@ -30,7 +65,7 @@ fun main() {
             var currentPos = Vector(0, 0)
             s.forEach {
                 try {
-                    val direction = when(it.first()) {
+                    val direction = when (it.first()) {
                         'R' -> Vector(1, 0)
                         'L' -> Vector(-1, 0)
                         'U' -> Vector(0, 1)
@@ -38,16 +73,17 @@ fun main() {
                         else -> throw Exception()
                     }
                     val iterations = it.drop(1).toInt()
-                    for(x in 0 until iterations) {
+                    for (x in 0 until iterations) {
                         steps += 1
                         currentPos += direction
-                        if(!posSet.containsKey(currentPos)) {
+                        if (!posSet.containsKey(currentPos)) {
                             posSet[currentPos] = steps
                         }
 
                     }
 
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                }
             }
         }
 
@@ -58,7 +94,7 @@ fun main() {
             var currentPos = Vector(0, 0)
             s.forEach {
                 try {
-                    val direction = when(it.first()) {
+                    val direction = when (it.first()) {
                         'R' -> Vector(1, 0)
                         'L' -> Vector(-1, 0)
                         'U' -> Vector(0, 1)
@@ -66,20 +102,21 @@ fun main() {
                         else -> throw Exception()
                     }
                     val iterations = it.drop(1).toInt()
-                    for(x in 0 until iterations) {
+                    for (x in 0 until iterations) {
                         currentPos += direction
                         steps += 1
-                        if(posSet.containsKey(currentPos)) {
+                        if (posSet.containsKey(currentPos)) {
 
                             val dist = posSet[currentPos]!! + steps
-                            if(dist < minDistance) {
+                            if (dist < minDistance) {
                                 minDistance = dist
                             }
 
                         }
                     }
 
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                }
             }
         }
 
@@ -96,16 +133,17 @@ joinToString(",").let
 }
 
 class Vector(val x: Int, val y: Int) {
-    operator fun plus(other: Vector) : Vector{
+    operator fun plus(other: Vector): Vector {
         return Vector(x + other.x, y + other.y)
     }
-    operator fun minus(other: Vector) : Vector{
+
+    operator fun minus(other: Vector): Vector {
         return Vector(x - other.x, y - other.y)
     }
 
-    operator override fun equals(other: Any?): Boolean {
-        if(other is Vector) {
-            if(x ==other.x && y == other.y) {
+    override operator fun equals(other: Any?): Boolean {
+        if (other is Vector) {
+            if (x == other.x && y == other.y) {
                 return true
             }
         }
@@ -196,13 +234,13 @@ fun day1() {
     }
 
     aocSolution(1) {
-        while(true) {
+        while (true) {
             mapToIntNotNull().forEach {
                 sum += it
-                if(set.contains(sum)) {
+                if (set.contains(sum)) {
                     return@aocSolution sum
                 }
-                set+=sum
+                set += sum
             }
         }
         0
@@ -224,23 +262,24 @@ fun day2() {
     aocSolution(2) {
         forEach { s ->
             s.forEach {
-                set+=it
+                set += it
             }
-            set.map {c ->
+            set.map { c ->
                 s.count { it == c }
             }.let {
                 if (it.contains(2)) x += 1
-                if(it.contains(3)) y += 1
+                if (it.contains(3)) y += 1
             }
             set.clear()
         }
-        x*y
+        x * y
     }.postLevel(1)
     aocSolution(2) {
         forEach { s1 ->
-            forEach {s2 ->
+            forEach { s2 ->
                 if (s1.zip(s2).count { it.first != it.second } == 1) {
-                    s1.toSet().toList().zip(s2.toSet().toList()).filter { it.first == it.second }.joinToString("") { it.first.toString() }.let { println(it) }
+                    s1.toSet().toList().zip(s2.toSet().toList()).filter { it.first == it.second }
+                        .joinToString("") { it.first.toString() }.let { println(it) }
 
                 }
             }
@@ -253,7 +292,7 @@ inline fun iterate(step: Int = 1, block: (Int) -> Unit) {
     var i = 0
     while (true) {
         block(i)
-        i+= step
+        i += step
     }
 }
 
@@ -266,7 +305,7 @@ fun calculateFuel2(fuel: Int): Int {
     } else 0
 }
 
-fun aocSolution(day: Int, solutionCode: List<String>.() -> Int) : AocSolution {
+fun aocSolution(day: Int, solutionCode: List<String>.() -> Int): AocSolution {
     val answer = solutionCode(AdventOfCodeConnection.fetchInput(day).lines().filter { it.isNotBlank() })
     val solution = AocSolution(day, answer)
     println(solution)
@@ -275,11 +314,11 @@ fun aocSolution(day: Int, solutionCode: List<String>.() -> Int) : AocSolution {
 
 fun Iterable<String>.mapToIntNotNull(): List<Int> = mapNotNull { it.toIntOrNull() }
 
-fun<T> MutableList<T>.pop(): T {
-    return removeAt(size-1)
+fun <T> MutableList<T>.pop(): T {
+    return removeAt(size - 1)
 }
 
-data class AocSolution(val day: Int, val answer: Int)  {
+data class AocSolution(val day: Int, val answer: Int) {
     fun postLevel(level: Int) {
         val responseString = AdventOfCodeConnection.postAnswer(day, level, answer)
         println("Solution posted")
