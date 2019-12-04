@@ -36,3 +36,18 @@ object AdventOfCodeConnection {
         }
     }
 }
+
+fun aocSolution(day: Int, solutionCode: List<String>.() -> Int): AocSolution {
+    val answer = solutionCode(AdventOfCodeConnection.fetchInput(day).lines().filter { it.isNotBlank() })
+    val solution = AocSolution(day, answer)
+    println(solution)
+    return solution
+}
+
+data class AocSolution(val day: Int, val answer: Int) {
+    fun postLevel(level: Int) {
+        val responseString = AdventOfCodeConnection.postAnswer(day, level, answer)
+        println("Solution posted")
+        println(responseString)
+    }
+}
