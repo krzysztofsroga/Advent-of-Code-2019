@@ -5,7 +5,7 @@ fun main() {
 
 }
 
-fun day4_2019() {
+fun day4() {
     aocSolution(4) {
         (240920..789857).asSequence().filter { it in 100_000..999_999 }.count { number ->
             var currentMax = 0
@@ -39,9 +39,7 @@ fun day4_2019() {
 }
 
 
-
-
-fun day3_2019() {
+fun day3() {
     val posSet = mutableMapOf<Vector, Int>()
     var minDistance: Int = 10000000
 
@@ -153,3 +151,21 @@ fun day2() {
         0
     }.postLevel(2)
 }
+
+fun day1() {
+    fun calculateFuel1(fuel: Int) = fuel / 3 - 2
+
+    fun calculateFuel2(fuel: Int): Int = calculateFuel1(fuel).let {
+        if (it > 0) it + calculateFuel2(it) else 0
+    }
+
+    aocSolution(1) {
+        mapToIntNotNull().map(::calculateFuel1).sum()
+    }.postLevel(1)
+
+    aocSolution(1) {
+        mapToIntNotNull().map(::calculateFuel2).sum()
+    }.postLevel(2)
+
+}
+
